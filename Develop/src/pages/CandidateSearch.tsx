@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { searchGithub, searchGithubUser } from '../api/API';
-
-interface Candidate {
-  avatar_url: string;
-  name: string;
-  login: string;
-  location: string;
-  email: string;
-  company: string;
-  html_url: string;
-}
+import Candidate from '../interfaces/Candidate.interface.tsx';
 
 const CandidateSearch = () => {
 const [candidates, setCandidates] = useState<any[]>([]);
