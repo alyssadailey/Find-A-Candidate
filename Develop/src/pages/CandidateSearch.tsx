@@ -1,10 +1,20 @@
 import { useState, useEffect } from 'react';
 import { searchGithub, searchGithubUser } from '../api/API';
 
+interface Candidate {
+  avatar_url: string;
+  name: string;
+  login: string;
+  location: string;
+  email: string;
+  company: string;
+  html_url: string;
+}
+
 const CandidateSearch = () => {
-const [candidates, setCandidates] = useState([]);
-const [currentCandidate, setCurrentCandidate] = useState(null);
-const [SavedCandidates, setSavedCandidates] = useState([]);
+const [candidates, setCandidates] = useState<any[]>([]);
+const [currentCandidate, setCurrentCandidate] = useState<Candidate | null>(null);
+const [savedCandidates, setSavedCandidates] = useState<Candidate[]>([]);
 
 
 useEffect(() => {
@@ -16,39 +26,48 @@ useEffect(() => {
       // sets the candidates to the users
       setCandidates(users);
       if (users.length > 0) {
-        loadCandidate(users[0]);
+        //  Ensure to use the correct property for username
+        loadCandidate(users[0].login);
       }
     } catch (error) {
       console.error("Error fetching candidates:", error);
     }
   };
-
+  // executes fetchCandidates
     fetchCandidates();
   }, []);
-  
-  const loadCandidate = async (username) => {
+
+  // loads candidates from the API
+  const loadCandidate = async (username: string) => {
     try{
+      // awaits searchGithubUser function then sets userData to the result
       const userData = await searchGithubUser(username);
       setCurrentCandidate(userData);
+      // error handling if error fetching candidate details
     } catch (error) {
       console.error("Error fetching candidate details:", error);
     }
   };
 
-  const handleNextCandidate = (save) => {
+// handles the next candidate once the + or - button is clicked on previous candidate
+  const handleNextCandidate = (save: boolean) => {
+    // if save is true and there is a current candidate, add the current candidate to the saved candidates
     if (save && currentCandidate) {
       setSavedCandidates([...savedCandidates, currentCandidate]);
     }
-
+// gets rest of candidates
     const remainingCandidates = candidates.slice(1);
     setCandidates(remainingCandidates);
-  
+    //  if there are remaining candidates, load the next candidate
       if (remainingCandidates.length > 0) {
-        loadCandidate(remainingCandidates[0]);
+        loadCandidate(remainingCandidates[0].login);
+        // displays message when no more candidates are available
       } else {
         setCurrentCandidate(null);
       }
     };
+
+    
 
 return (
   <div>
@@ -57,6 +76,7 @@ return (
 
     {currentCandidate ? (
       <div>
+        {/* displays user profile photo */}
         <img src={currentCandidate.avatar_url} alt="avatar" width="100" />
         {/* displays candidate name */}
         <h2>{currentCandidate.name}</h2>
