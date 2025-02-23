@@ -1,5 +1,5 @@
 // TODO: Create an interface for the Candidate objects returned by the API
-interface Candidate {
+export interface Candidate {
     avatar_url: string;
     name: string;
     login: string;
@@ -9,4 +9,4 @@ interface Candidate {
     html_url: string;
   }
 
-  export default Candidate;
+  
