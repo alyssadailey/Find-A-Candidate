@@ -7,6 +7,11 @@ import '../index.css';
 const CandidateSearch = () => {
 const [candidates, setCandidates] = useState<Candidate[]>([]);
 const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
+const [savedCandidates, setSavedCandidates] = useState<Candidate[]>(() => {
+
+const storedCandidates = localStorage.getItem("savedCandidates");
+return storedCandidates? JSON.parse(storedCandidates) : [];
+});
 
 useEffect(() => {
   // fetches candidates from the API
@@ -21,20 +26,31 @@ useEffect(() => {
     fetchCandidates();
   }, []);
 
+  // Savse candidates to localStorage whenever savedCandidates updates
+  useEffect(() => {
+    localStorage.setItem("savedCandidates", JSON.stringify(savedCandidates));
+  }, [savedCandidates]);
+
 
 // handles the next candidate once the + or - button is clicked on previous candidate
   const handleSaveCandidate = () => {
-    // if save is true and there is a current candidate, add the current candidate to the saved candidates
+
     const candidate = candidates[currentCandidateIndex];
-    console.log('Saved candidate:', candidate);
-    setCurrentCandidateIndex((prevIndex) => prevIndex + 1);
+    // if it is true that the candidate was saved with the + button
+    if (candidate) {
+      // adds the candidate to the saved candidates
+      setSavedCandidates((prev) => [...prev, candidate]);
+      // sets the current candidate index to the next candidate
+      setCurrentCandidateIndex((prevIndex) => prevIndex + 1);
+      console.log('Saved candidate:', candidate);
+    }
     };
 
     const handleNextCandidate = () => {
       setCurrentCandidateIndex((prevIndex) => prevIndex + 1);
-    };
+    }
 
-    if(!candidates.length) {
+    if (!candidates.length) {
       return <p>No candidates available to review.</p>;
     }
 
