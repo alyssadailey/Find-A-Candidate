@@ -64,8 +64,9 @@ return (
 
     {currentCandidate ? (
       <div>
+      <body>
         {/* displays user profile photo */}
-        <img src={currentCandidate.avatar_url} alt="avatar" width="100" />
+        <img src={currentCandidate.avatar_url} alt="avatar" width="300" />
         {/* displays candidate name */}
         <h2>{currentCandidate.name}</h2>
         {/* displays username */}
@@ -78,10 +79,12 @@ return (
         <p><strong>Company:</strong> {currentCandidate.company || "N/A"}</p>
         {/* displays candidate url */}
         <p><a href={currentCandidate.html_url} target="_blank" rel="noopener noreferrer">GitHub Profile</a></p>
+        
+        </body>
         {/* + and - buttons */}
-        <button onClick={handleSaveCandidate}>+</button>
-        <button onClick={handleNextCandidate}>-</button>
-      </div>
+        <button className= "plus-button" onClick={handleSaveCandidate}>+</button>
+        <button className="minus-button" onClick={handleNextCandidate}>-</button>
+        </div>
     ) : (
       // when no more candidates are available this message will be displayed
       <p>No more candidates available</p>

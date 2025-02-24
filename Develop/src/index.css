@@ -53,6 +53,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  
 }
 button:hover {
   border-color: #646cff;
@@ -101,6 +102,7 @@ tbody tr:nth-child(odd) {
 }
 
 .nav-item {
+  color:white;
   padding: 0 0.5rem;
   list-style: none;
 }
@@ -118,3 +120,18 @@ tbody tr:nth-child(odd) {
   width: 80vw;
   table-layout: fixed;
 }
+
+.plus-button{
+background-color: green;
+border-radius: 50%;
+}
+
+.minus-button{
+background-color: red;
+border-radius: 50%; 
+}
+
+.minus-button-two{
+  background-color: red;
+  border-radius: 50%; 
+  }
