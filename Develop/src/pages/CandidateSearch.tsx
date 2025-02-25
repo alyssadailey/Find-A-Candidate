@@ -7,20 +7,30 @@ import '../index.css';
 const CandidateSearch = () => {
 const [candidates, setCandidates] = useState<Candidate[]>([]);
 const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
+const [currentCandidate, setCurrentCandidate] = useState<Candidate>();
 const [savedCandidates, setSavedCandidates] = useState<Candidate[]>(() => {
 
 const storedCandidates = localStorage.getItem("savedCandidates");
-return storedCandidates? JSON.parse(storedCandidates) : [];
+return storedCandidates ? JSON.parse(storedCandidates) : [];
 });
 
 useEffect(() => {
   // fetches candidates from the API
   const fetchCandidates = async () => {
-    
-      // awaits API candidate search
-      const data = await searchGithub();
-      // sets the candidates to the users
-      setCandidates(data);
+
+    try {
+        // awaits API candidate search
+        const data: Candidate[] = await searchGithub();
+        // sets the candidates to the users
+        setCandidates(data);
+        // Check if data contains at least one candidate before accessing it
+          if (data.length > 0) {
+            const data = await searchGithubUser(data[0].login);
+            setCurrentCandidate(user);
+          }
+    } catch (error) {
+      console.error("Error fetching candidates:", error);
+    }
   };
   // executes fetchCandidates
     fetchCandidates();
@@ -31,18 +41,29 @@ useEffect(() => {
     localStorage.setItem("savedCandidates", JSON.stringify(savedCandidates));
   }, [savedCandidates]);
 
+  useEffect(() => {
+    const fetchNewCandidate = async () => {
+      if (candidates[currentCandidateIndex]) {
+        const user = await searchGithubUser(candidates[currentCandidateIndex].login);
+        setCurrentCandidate(user);
+      } else {
+        setCurrentCandidate(null);
+      }
+    };
+    fetchNewCandidate();
+  }, [currentCandidateIndex, candidates]);
+  
+
 
 // handles the next candidate once the + or - button is clicked on previous candidate
   const handleSaveCandidate = () => {
-
-    const candidate = candidates[currentCandidateIndex];
     // if it is true that the candidate was saved with the + button
-    if (candidate) {
+    if (currentCandidate) {
       // adds the candidate to the saved candidates
-      setSavedCandidates((prev) => [...prev, candidate]);
+      setSavedCandidates((prev) => [...prev, currentCandidate]);
       // sets the current candidate index to the next candidate
       setCurrentCandidateIndex((prevIndex) => prevIndex + 1);
-      console.log('Saved candidate:', candidate);
+      
     }
     };
 
@@ -53,9 +74,6 @@ useEffect(() => {
     if (!candidates.length) {
       return <p>No candidates available to review.</p>;
     }
-
-    const currentCandidate = candidates[currentCandidateIndex];
-    
     
 return (
   <div>
@@ -64,7 +82,7 @@ return (
 
     {currentCandidate ? (
       <div>
-      <body>
+      {/* <body> */}
         {/* displays user profile photo */}
         <img src={currentCandidate.avatar_url} alt="avatar" width="300" />
         {/* displays candidate name */}
@@ -80,7 +98,7 @@ return (
         {/* displays candidate url */}
         <p><a href={currentCandidate.html_url} target="_blank" rel="noopener noreferrer">GitHub Profile</a></p>
         
-        </body>
+        {/* </body> */}
         {/* + and - buttons */}
         <button className= "plus-button" onClick={handleSaveCandidate}>+</button>
         <button className="minus-button" onClick={handleNextCandidate}>-</button>

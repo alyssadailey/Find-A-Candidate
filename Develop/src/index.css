@@ -124,11 +124,13 @@ tbody tr:nth-child(odd) {
 .plus-button{
 background-color: green;
 border-radius: 50%;
+margin: 5em;
 }
 
 .minus-button{
 background-color: red;
 border-radius: 50%; 
+margin: 5em;
 }
 
 .minus-button-two{
