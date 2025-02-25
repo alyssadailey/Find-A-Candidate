@@ -7,7 +7,7 @@ import '../index.css';
 const CandidateSearch = () => {
 const [candidates, setCandidates] = useState<Candidate[]>([]);
 const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
-const [currentCandidate, setCurrentCandidate] = useState<Candidate>();
+const [currentCandidate, setCurrentCandidate] = useState<Candidate | null>(null);
 const [savedCandidates, setSavedCandidates] = useState<Candidate[]>(() => {
 
 const storedCandidates = localStorage.getItem("savedCandidates");
@@ -25,7 +25,7 @@ useEffect(() => {
         setCandidates(data);
         // Check if data contains at least one candidate before accessing it
           if (data.length > 0) {
-            const data = await searchGithubUser(data[0].login);
+            const user = await searchGithubUser(data[0].login);
             setCurrentCandidate(user);
           }
     } catch (error) {
@@ -83,6 +83,7 @@ return (
     {currentCandidate ? (
       <div>
       {/* <body> */}
+      <tr>
         {/* displays user profile photo */}
         <img src={currentCandidate.avatar_url} alt="avatar" width="300" />
         {/* displays candidate name */}
@@ -97,16 +98,19 @@ return (
         <p><strong>Company:</strong> {currentCandidate.company || "N/A"}</p>
         {/* displays candidate url */}
         <p><a href={currentCandidate.html_url} target="_blank" rel="noopener noreferrer">GitHub Profile</a></p>
-        
+        </tr>
         {/* </body> */}
         {/* + and - buttons */}
-        <button className= "plus-button" onClick={handleSaveCandidate}>+</button>
         <button className="minus-button" onClick={handleNextCandidate}>-</button>
+        <button className= "plus-button" onClick={handleSaveCandidate}>+</button>
+        
+        
         </div>
     ) : (
       // when no more candidates are available this message will be displayed
       <p>No more candidates available</p>
     )}
+    
   </div>
   );
 };
