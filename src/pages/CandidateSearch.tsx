@@ -40,6 +40,7 @@ useEffect(() => {
   useEffect(() => {
     localStorage.setItem("savedCandidates", JSON.stringify(savedCandidates));
   }, [savedCandidates]);
+  
 
   useEffect(() => {
     const fetchNewCandidate = async () => {
@@ -99,8 +100,10 @@ return (
         <p><a href={currentCandidate.html_url} target="_blank" rel="noopener noreferrer">GitHub Profile</a></p>
         </div>
         {/* + and - buttons */}
+        <div className="button-container">
         <button className="minus-button" onClick={handleNextCandidate}>-</button>
         <button className= "plus-button" onClick={handleSaveCandidate}>+</button>
+        </div>
         </div>
     ) : (
       // when no more candidates are available this message will be displayed
