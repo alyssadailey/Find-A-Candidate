@@ -5,9 +5,17 @@ import { Candidate } from '../interfaces/Candidate.interface';
 import '../index.css';
 
 const CandidateSearch = () => {
+
+   // State to store the list of candidates fetched from the API
 const [candidates, setCandidates] = useState<Candidate[]>([]);
+
+// State to track the index of the currently displayed candidate
 const [currentCandidateIndex, setCurrentCandidateIndex] = useState(0);
+
+ // State to store the details of the currently displayed candidate
 const [currentCandidate, setCurrentCandidate] = useState<Candidate | null>(null);
+
+// State to manage saved candidates, initialized from localStorage
 const [savedCandidates, setSavedCandidates] = useState<Candidate[]>(() => {
 
 const storedCandidates = localStorage.getItem("savedCandidates");
@@ -21,9 +29,9 @@ useEffect(() => {
     try {
         // awaits API candidate search
         const data: Candidate[] = await searchGithub();
-        // sets the candidates to the users
+         // Update the candidates state with fetched data
         setCandidates(data);
-        // Check if data contains at least one candidate before accessing it
+         // If candidates are available, fetch and set the first candidate's details
           if (data.length > 0) {
             const user = await searchGithubUser(data[0].login);
             setCurrentCandidate(user);
@@ -32,16 +40,15 @@ useEffect(() => {
       console.error("Error fetching candidates:", error);
     }
   };
-  // executes fetchCandidates
     fetchCandidates();
   }, []);
 
-  // Savse candidates to localStorage whenever savedCandidates updates
+  // Saves candidates to localStorage whenever savedCandidates state updates
   useEffect(() => {
     localStorage.setItem("savedCandidates", JSON.stringify(savedCandidates));
   }, [savedCandidates]);
   
-
+// Effect to fetch new candidate details when currentCandidateIndex changes
   useEffect(() => {
     const fetchNewCandidate = async () => {
       if (candidates[currentCandidateIndex]) {
@@ -60,18 +67,20 @@ useEffect(() => {
   const handleSaveCandidate = () => {
     // if it is true that the candidate was saved with the + button
     if (currentCandidate) {
-      // adds the candidate to the saved candidates
+       // Add the current candidate to the saved candidates list
       setSavedCandidates((prev) => [...prev, currentCandidate]);
-      // sets the current candidate index to the next candidate
+       // Move to the next candidate
       setCurrentCandidateIndex((prevIndex) => prevIndex + 1);
       
     }
     };
 
+    // Function to skip the current candidate and move to the next one
     const handleNextCandidate = () => {
       setCurrentCandidateIndex((prevIndex) => prevIndex + 1);
     }
 
+    // Display message if no candidates are available
     if (!candidates.length) {
       return <p>No candidates available to review.</p>;
     }
