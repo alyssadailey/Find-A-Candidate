@@ -52,11 +52,11 @@ Live Site: https://find-a-candidate.onrender.com
 
 -Open the app in your browser (http://localhost:3000 by default).
 
-photo reference:![Alt text](../Develop/src/assets/SS-1.png)
+photo reference:![Alt text](./src/assets/SS-1.png)
 
 -View developer profiles fetched from GitHub.
 
-photo reference:![Alt text](../Develop/src/assets/SS-2.png)
+photo reference:![Alt text](./src/assets/SS-2.png)
 
 -Use the green plus (+) button to save a candidate.
 
@@ -64,11 +64,11 @@ photo reference:![Alt text](../Develop/src/assets/SS-2.png)
 
 -When the user has gone through all available candidates, it will display that there are no new candidates to view
 
-photo reference:![Alt text](../Develop/src/assets/SS-3.png)
+photo reference:![Alt text](./src/assets/SS-3.png)
 
 -Navigate to the Potential Candidates page to review saved developers.
 
-photo reference:![Alt text](../Develop/src/assets/SS-4.png)
+photo reference:![Alt text](./src/assets/SS-4.png)
 
 -Click the Remove button to discard a saved candidate if necessary.
 
